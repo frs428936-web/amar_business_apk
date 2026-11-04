@@ -1,5 +1,4 @@
 
-
 name: Build Android APK
 
 on:
@@ -11,17 +10,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: kivy/buildozer:latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Build APK
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
-        with:
-          workdir: .
-          buildozer_version: stable
+        run: |
+          buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
@@ -29,4 +26,5 @@ jobs:
           name: business-apk
           path: bin/*.apk
           if-no-files-found: error
+
 
