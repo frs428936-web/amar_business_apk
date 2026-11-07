@@ -9,7 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    timeout-minutes: 60
 
     steps:
       - name: Checkout
@@ -29,29 +28,27 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            git zip unzip autoconf libtool \
-            pkg-config zlib1g-dev libncurses5-dev \
-            libncursesw5-dev libtinfo5 cmake \
-            libffi-dev libssl-dev automake
+          sudo apt-get install -y git zip unzip \
+            autoconf libtool pkg-config \
+            zlib1g-dev libncurses5-dev \
+            libffi-dev libssl-dev \
+            automake cmake
 
       - name: Install Buildozer
         run: |
-          python -m pip install --upgrade pip
+          pip install --upgrade pip setuptools
           pip install buildozer cython==0.29.34
 
       - name: Build APK
-        env:
-          APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
         run: |
-          buildozer -v android debug
+          buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Business-App-APK
           path: bin/*.apk
-          if-no-files-found: error
+
 
 
 
